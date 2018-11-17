@@ -17,4 +17,4 @@ The DIT created can be loaded (via slapadd) to OpenLDAP running on any
 platform. The server doesn't need to run on illumos, but this DIT is capable of
 supporting illumos clients.
 
-There is additional info in <LDAP-KIT.README>.
+There is additional info in <./LDAP-KIT.README>.
