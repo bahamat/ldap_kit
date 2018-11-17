@@ -10,31 +10,27 @@ all: templates
 
 
 templates:
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g autofs.template > autofs.ldif
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g dit-base.template \
-		| /bin/sed s/__NISDOMAIN__/$(NISDOMAIN)/g > dit-base.ldif
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g dua.template \
-		| /bin/sed s/__LDAPSERVERS__/$(SERVERS)/ \
-		| /bin/sed s/__PREFSERVERS__/$(PREFSERVERS)/ > dua.ldif
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g proxyAgent.template \
-		| /bin/sed s/__PROXYPASS__/$(PROXY_PASS_SSHA)/ > proxyAgent.ldif
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g rbac.template > rbac.ldif
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g autofs.template > autofs.ldif
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g dit-base.template \
+		| /usr/bin/sed s/__NISDC__/$(NISDC)/g \
+		| /usr/bin/sed s/__NISDOMAIN__/$(NISDOMAIN)/g > dit-base.ldif
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g dua.template \
+		| /usr/bin/sed s/__LDAPSERVERS__/$(SERVERS)/ \
+		| /usr/bin/sed s/__PREFSERVERS__/$(PREFSERVERS)/ > dua.ldif
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g proxyAgent.template \
+		| /usr/bin/sed s/__PROXYPASS__/$(PROXY_PASS_HASH)/ > proxyAgent.ldif
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g rbac.template > rbac.ldif
 
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g mirrormode.template \
-		| /bin/sed s/__MIRRORMODE_PASS__/$(MIRROR_PASS_SSHA)/ > mirrormode.ldif
-	
-	mkdir groups
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g group.template > groups/group.copyme
-	mkdir users
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g user.template > users/user.copyme
-	mkdir hosts
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g host.template > hosts/host.copyme
-	mkdir projects
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g project.template > projects/project.copyme
-	mkdir netgroups
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g netgroup.template > netgroups/netgroup.copyme
-	mkdir aliases
-	/bin/sed s/__DOMAIN__/$(DOMAIN)/g aliases.template > aliases/aliases.copyme
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g mirrormode.template \
+		| /usr/bin/sed s/__MIRRORMODE_PASS__/$(MIRROR_PASS_HASH)/ > mirrormode.ldif
+
+	mkdir groups users hosts projects netgroups aliases
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g group.template > groups/group.copyme
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g user.template > users/user.copyme
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g host.template > hosts/host.copyme
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g project.template > projects/project.copyme
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g netgroup.template > netgroups/netgroup.copyme
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g aliases.template > aliases/aliases.copyme
 
 	mkdir template
 	mv *.template template
@@ -42,16 +38,15 @@ templates:
 	# Now start modifying LDIF's, namely DUA, proxyAgent, and mirrormode.
 	#
 
-clean-all: 
+clean:
 	rm -f autofs.ldif dit-base.ldif dua.ldif proxyAgent.ldif \
 		mirrormode.ldif rbac.ldif
 	rm -rf groups users hosts projects netgroups aliases
 	mv template/*.template .
 	rmdir template
-	
 
 
-backup: 
+backup:
 	mkdir backups
 	cp *.ldif backups
 

@@ -14,7 +14,7 @@ slapd.conf.master:
 		| /bin/sed s/__TLS_CA_CERT__/$(TLS_ROOT_SED)$(TLS_CA_CERT)/g \
 		| /bin/sed s/__TLS_SRV_CERT__/$(TLS_ROOT_SED)$(TLS_SRV_CERT)/g \
 		| /bin/sed s/__TLS_SRV_KEY__/$(TLS_ROOT_SED)$(TLS_SRV_KEY)/g \
-		| /bin/sed s/__ROOTDN_PASS__/$(ROOTDN_PASS_SSHA)/g \
+		| /bin/sed s/__ROOTDN_PASS__/$(ROOTDN_PASS_HASH)/g \
 		| /bin/sed s/__MIRROR_PEER_IP__/$(MIRROR_PEER_IP)/g \
 		| /bin/sed s/__MIRROR_PASS__/$(MIRROR_PASS)/g \
 		> slapd.conf.master

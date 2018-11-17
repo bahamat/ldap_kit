@@ -1,0 +1,5 @@
+dn: automountKey=/home,automountMapName=auto_master,__DOMAIN__
+objectClass: automount
+objectClass: top
+automountKey: /home
+automountInformation: /etc/auto_homedir
