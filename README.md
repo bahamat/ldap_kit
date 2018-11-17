@@ -1,8 +1,20 @@
-This is the "Joyent LDAP Kit".  It was created years ago as an attempt to make it easier to bootstrap an LDAP infrastructure for Solaris authentication.  Found here is a copy of "Easy RSA" for creating a CA, the source for the ns1 tool to encrypt/decrypt passwords in the format that Solaris's Native LDAP client reads them, an OpenLDAP compatable "consolidated schema" with all the DIT schema objects for Solaris features, DIT templates for creating your base objects, and some (really basic and bad) scripts for bootstrapping clients.
+# Joyent LDAP Kit
 
+This is the "Joyent LDAP Kit". It was created years ago as an attempt to make
+it easier to bootstrap an LDAP infrastructure for Solaris authentication.
 
-The real readme is LDAP-KIT.README.
+This kit is intended for use with OpenLDAP.
 
-Please understand that this stuff is all still relevant today but I am not longer maintaining it.  The irony is that once you have your LDAP implementation in place you are past all the pain that this kit was designed to remove.  All bootstrapping of LDAP clients is now preformed via Chef Cookbooks, which are not included here.
+Feel free to use this for your own organization.
 
-This kit is intended for use with OpenLDAP.  
+Found here is an OpenLDAP compatable "consolidated schema" with all the DIT
+schema objects for illumos features, DIT templates for creating your base
+objects, and some example content. This also includes the source for a tool to
+encrypt/decrypt passwords in the format that Solaris's Native LDAP client reads
+them.
+
+The DIT created can be loaded (via slapadd) to OpenLDAP running on any
+platform. The server doesn't need to run on illumos, but this DIT is capable of
+supporting illumos clients.
+
+There is additional info in <LDAP-KIT.README>.
