@@ -36,35 +36,36 @@
 static int
 not_marked(const char *pass)
 {
-    return strncmp(pass, CRYPTMARK, strlen(CRYPTMARK));
+	return (strncmp(pass, CRYPTMARK, strlen(CRYPTMARK)));
 }
 
-/* usage();
+/*
+ * usage();
  *
  * Print help.
  */
 void
 usage(char *self, int e)
 {
-    fprintf(stderr, "Usage: %s hash\n", self);
-    fprintf(stderr, "Usage: %s password\n", self);
-    exit (e);
+	fprintf(stderr, "Usage: %s hash\n", self);
+	fprintf(stderr, "Usage: %s password\n", self);
+	exit(e);
 }
 
 int
 main(int argc, char **argv)
 {
-    if (argc != 2) {
-        usage (argv[0], 1);
-    }
-    if (strncmp(argv[1], "-h", 2) == 0) {
-        usage (argv[0], 0);
-    }
+	if (argc != 2) {
+		usage(argv[0], 1);
+	}
+	if (strncmp(argv[1], "-h", 2) == 0) {
+		usage(argv[0], 0);
+	}
 
-    if (not_marked(argv[1])) {
-        printf("%s\n", evalue(argv[1]));
-    } else {
-        printf("%s\n", dvalue(argv[1]));
-    }
-    exit (0);
+	if (not_marked(argv[1])) {
+		printf("%s\n", evalue(argv[1]));
+	} else {
+		printf("%s\n", dvalue(argv[1]));
+	}
+	exit(0);
 }
