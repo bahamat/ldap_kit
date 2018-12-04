@@ -1,9 +1,9 @@
-dn: ou=policies,__DOMAIN__
+dn: ou=ppolicy,__DOMAIN__
 objectClass: organizationalUnit
 objectClass: top
-ou: policies
+ou: ppolicy
 
-dn: cn=default,ou=policies,__DOMAIN__
+dn: cn=default,ou=ppolicy,__DOMAIN__
 cn: default
 objectClass: pwdPolicy
 objectClass: person
