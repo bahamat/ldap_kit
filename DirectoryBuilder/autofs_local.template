@@ -1,3 +1,5 @@
+# Use this file if you want to automount directories on the local host
+# created by the /etc/auto_homedir script.
 dn: automountKey=/home,automountMapName=auto_master,__DOMAIN__
 objectClass: automount
 objectClass: top

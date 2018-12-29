@@ -10,7 +10,8 @@ all: templates
 
 
 templates:
-	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g autofs.template > autofs.ldif
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g autofs_local.template > autofs_local.ldif
+	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g autofs_remote.template > autofs_remote.ldif
 	/usr/bin/sed s/__DOMAIN__/$(DOMAIN)/g dit-base.template \
 		| /usr/bin/sed s/__NISDC__/$(NISDC)/g \
 		| /usr/bin/sed s/__NISDOMAIN__/$(NISDOMAIN)/g > dit-base.ldif
@@ -39,8 +40,8 @@ templates:
 	#
 
 clean:
-	rm -f autofs.ldif dit-base.ldif dua.ldif proxyAgent.ldif \
-		mirrormode.ldif rbac.ldif
+	rm -f autofs_local.ldif autofs_remote.ldif dit-base.ldif dua.ldif \
+		proxyAgent.ldif  mirrormode.ldif rbac.ldif
 	rm -rf groups users hosts projects netgroups aliases
 	mv template/*.template .
 	rmdir template

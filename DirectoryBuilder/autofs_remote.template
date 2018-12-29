@@ -1,3 +1,4 @@
+# Use this if you want to automount home directories from a remote NFS server.
 dn: automountKey=/net,automountMapName=auto_master,__DOMAIN__
 objectClass: automount
 objectClass: top
