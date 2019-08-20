@@ -11,7 +11,7 @@ sn: User
 cn: Exampel User
 uid: example
 userPassword: {CRYPT}LK
-uidNumber: 1000
+uidNumber: 101
 gidNumber: 10
 loginShell: /bin/bash
 homeDirectory: /home/example
