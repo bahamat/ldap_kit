@@ -1,0 +1,96 @@
+#!/bin/bash
+
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Copyright 2019 Joyent, Inc.
+
+# Inspired by
+# http://znogger.blogspot.com/2010/05/solaris-automatic-creation-of-home-dirs.html
+
+# To use this script to automatically create home directories, either import
+# autofs_local.ldif into your LDAP DIT or add the following to
+# `/etc/auto_master`:
+#
+#     /home /etc/auto_homedir
+
+if [[ -n "$TRACE" ]]; then
+    export PS4='[\D{%FT%TZ}] ${BASH_SOURCE}:${LINENO}: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+    set -o xtrace
+fi
+
+# Configurable variables
+# Ideally, this should be in a config file.
+homebase='home'                 # Required
+exportbase="export/${homebase}" # Required
+zpool='zones'                   # Delete this if not using
+delegated_base='data'           # Delete this if not using
+
+# Set some reasonable restrictions on user zfs datasets
+zfs_options=( -o devices=off -o setuid=off -o snapshot_limit=10 )
+zfs_local_allow='diff,mount,rollback,snapshot'
+zfs_descendent_allow='clone,create,destroy,rename'
+
+# Non-configurable variables
+user="$1"
+homedir="/${homebase:?}/${user:?}"
+exportdir="/${exportbase:?}/${user:?}"
+
+##
+## Exit early if possible
+##
+
+if ! [[ -d /$homebase ]]; then
+    : $homebase does not exist
+    exit 0
+fi
+if [[ -d $exportdir ]]; then
+    : $exportdir already exists
+    echo "localhost:$exportdir"
+    exit 0
+fi
+
+# Get user details from passwd database
+IFS=: read -r -a ent <<< $(getent passwd "$user")
+
+if [[ -z ${ent[0]} ]]; then
+    : User "$user" does not exist
+    exit 0
+fi
+if ! [[ ${ent[5]} == $homedir ]]; then
+    : "${ent[5]}" is not a child of "/$homebase"
+    exit 0
+fi
+
+# We've made it this far, it means the home directory needs to be created.
+
+if [[ -n $zpool ]]; then
+    zonename=$(zonename)
+    case "$zonename" in
+        global)
+            zfsbase="${zpool:?}"
+            ;;
+        *)
+            zfsbase="${zpool:?}/${zonename}/${delegated_base}"
+            ;;
+    esac
+    zfshome="${zfsbase}/${homebase}"
+fi
+
+# If $zfsbase exists create a child dataset, otherwise just make a directory.
+if [[ -n $zfsbase ]] && [[ -d /$zfsbase ]]; then
+    if ! [[ -d ${zfshome} ]]; then
+        zfs create -o mountpoint="/$exportbase" "${zfshome}"
+    fi
+    zfs create "${zfs_options[@]}" "${zfshome}/${user}"
+    zfs allow "$user" "$zfs_local_allow" "${zfshome}/${user}"
+    zfs allow -d "$user" "$zfs_descendent_allow" "${zfshome}/${user}"
+else
+    mkdir -p "$exportdir"
+fi
+# Populate initial contents of home directory
+rsync -a /etc/skel/ "${exportdir}/"
+chown -Rh "${ent[2]}:${ent[3]}" "$exportdir"
+
+echo "localhost:$exportdir"
