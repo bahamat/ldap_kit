@@ -1,0 +1,57 @@
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
+# Use is subject to license terms.
+#
+
+#
+# /etc/nsswitch.conf:
+#
+# "hosts:" and "services:" in this file are used only if the
+# /etc/netconfig file has a "-" for nametoaddr_libs of "inet" transports.
+
+# need ldap after files for instances in particular as the ldap cache lookups
+# depend on a door file that doesn't exist yet when it wants to use ldap
+# resulting in smf breakage at boot
+#
+passwd:     files ldap
+group:      files ldap
+hosts:      files dns mdns
+ipnodes:    files dns mdns
+networks:   files ldap
+protocols:  files ldap
+rpc:        files ldap
+ethers:     files ldap
+netmasks:   files
+bootparams: files ldap
+publickey:  files ldap
+netgroup:   ldap
+automount:  files ldap
+aliases:    files ldap
+services:   files ldap
+printers:   user files ldap
+
+# these are set to query ldap for RBAC settings
+auth_attr:  files ldap
+prof_attr:  files ldap
+project:    files ldap
+
+tnrhtp:     files
+tnrhdb:     files

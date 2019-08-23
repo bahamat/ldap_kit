@@ -1,10 +1,10 @@
-ns: ns_crypt.o ns.o
-	gcc -o $@ ns_crypt.o ns.o
+ns1: ns_crypt.o ns1.o
+	gcc -o $@ ns_crypt.o ns1.o
 
 .PHONY: clean test
 
-test: ns
-	./test.sh ns foo
+test: ns1
+	./test.sh ns1 foo
 
 clean:
-	rm -f *.o ns ns1
+	rm -f *.o ns1
